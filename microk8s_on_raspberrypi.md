@@ -13,14 +13,16 @@ follow this [link](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-ra
 ## get MAC address
 1. goto `/sys/class/net`
 2. select the net interface that you want to check, normally it should be `wlan0`
-3. check `vi eaddress` there
+3. check `vi address` there
 
 ## change hostname
 1. goto `/etc/hostname`
 2. goto `/etc/hosts` add one line `127.0.0.1 newHostName`
+3. restart
+4. check the status by `hostnamectl`
 
 ## get hostname of adjacent nodes
-1. you can configure adjacent nodes ip address in `/etc/hostname`
+1. you can configure adjacent nodes ip address in `/etc/hosts`
 
 # Microk8s cluster
 
@@ -29,12 +31,31 @@ After install Ubuntu Server 64-bit, you can install microk8s on each node. Pleas
 
 ## steps
 
-1. For convenience, change the hostname and add microk8s to your `sudo`
-2. install microk8s by running command `sudo snap install microk8s --classic --channel=1.19/stable` where 1.19 specify the version of the microk8s.
-3. run `sudo microk8s add-node` on the master and add node by running `microk8s join `
-4. when you need to add another additional node, run commands in the step 3 again
-5. disable sleep or suspend on each node `sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
-`
+1. install microk8s by running command 
+
+	```
+	sudo snap install microk8s --classic --channel=1.19/stable
+	```
+
+	where 1.19 specify the version of the microk8s.
+
+2. For convenience, change the hostname and add microk8s to your `sudo`:
+
+	```
+	sudo usermod -a -G microk8s ubuntu && sudo reboot
+	```
+3. check the status by
+
+	```
+	microk8s status
+	```
+4. run `microk8s add-node` on the master and add node by running `microk8s join `
+5. when you need to add another additional node, run commands in the step 3 again
+6. disable sleep or suspend on each node
+
+	```
+	sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+	```
 
 ## check
 1. if you install the version 1.9, when you run `microk8s status`, you can get the detail like this: if you are using any higher system, you should get the same output.
@@ -85,6 +106,15 @@ dashboard provide a visual panel of the kubernetes cluster from remote browser
 	```
 	microk8s kubectl get services -n kube-system
 	```
+	the output should be like this
+
+	```
+	NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE
+metrics-server              ClusterIP   10.152.183.53    <none>        443/TCP                  14m
+kubernetes-dashboard        ClusterIP   10.152.183.111   <none>        443/TCP                  13m
+dashboard-metrics-scraper   ClusterIP   10.152.183.223   <none>        8000/TCP                 13m
+kube-dns                    ClusterIP   10.152.183.10    <none>        53/UDP,53/TCP,9153/TCP   8m43s
+	```
 3. get the token
 
 	```
@@ -95,9 +125,17 @@ dashboard provide a visual panel of the kubernetes cluster from remote browser
 	```
 	microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard --address 0.0.0.0 10443:443
 	```
+	or run it at backend ???
+	```
+	microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard --address 0.0.0.0 10443:443 &&
+	```
 5. then it is accessible from the remote browser by this URL, only the firefox browser can work, so you need to download firefox.
 
 	```
 	https://(MicroK8s primary node's Hostname or IP address):10443/
 	```
+	
+	
+## reference
+1. [the most important one](https://www.server-world.info/en/note?os=Ubuntu_20.04&p=microk8s&f=4)	
 
