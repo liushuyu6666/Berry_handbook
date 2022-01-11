@@ -139,3 +139,7 @@ kube-dns                    ClusterIP   10.152.183.10    <none>        53/UDP,53
 ## reference
 1. [the most important one](https://www.server-world.info/en/note?os=Ubuntu_20.04&p=microk8s&f=4)	
 
+# install openFAAS
+## 
+
+## troubleshooting
