@@ -1,29 +1,4 @@
 # Ubuntu Server on raspberry pi
-## install Ubuntu Server
-follow this [link](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#1-overview), which will tell you:
-
-1.  burn Ubuntu server to your SD card
-2.  network configuration
-3.  ssh connnection
-    1. insert the SD card and power it
-    2. when the green light finish flashing, which always takes 3 to 4 minutes, unplugin the power cable
-    3. plugin again
-    4. it is better to check your modem admin page, but you can use `nmap -sP 192.168.2.0/24` or `arp -an | grep e4:5f:1` to find the raspberry pi
-
-## get MAC address
-1. goto `/sys/class/net`
-2. select the net interface that you want to check, normally it should be `wlan0`
-3. check `vi address` there
-
-## change hostname
-1. goto `/etc/hostname`
-2. goto `/etc/hosts` add one line `127.0.0.1 newHostName`
-3. restart
-4. check the status by `hostnamectl`
-
-## get hostname of adjacent nodes
-1. you can configure adjacent nodes ip address in `/etc/hosts`
-
 # Microk8s cluster
 
 ## overview
